@@ -33,6 +33,62 @@ except ImportError:
 print(json.dumps(%s))
 `
 
+// ChassisComponentsPyScript retrieves all chassis components via Platform API
+var ChassisComponentsPyScript = `
+import json
+try:
+    from sonic_platform.platform import Platform
+    chassis = Platform().get_chassis()
+    components = []
+    
+    if hasattr(chassis, 'get_all_components'):
+        for component in chassis.get_all_components():
+            try:
+                components.append({
+                    'name': component.get_name() if hasattr(component, 'get_name') else 'N/A',
+                    'firmware_version': component.get_firmware_version() if hasattr(component, 'get_firmware_version') else 'N/A',
+                    'description': component.get_description() if hasattr(component, 'get_description') else 'N/A'
+                })
+            except Exception:
+                continue
+    
+    print(json.dumps(components))
+except Exception:
+    print('[]')
+`
+
+// ModuleComponentsPyScript retrieves all module components via Platform API
+var ModuleComponentsPyScript = `
+import json
+try:
+    from sonic_platform.platform import Platform
+    chassis = Platform().get_chassis()
+    components = []
+    
+    if hasattr(chassis, 'get_all_modules'):
+        for module in chassis.get_all_modules():
+            try:
+                module_name = module.get_name() if hasattr(module, 'get_name') else 'N/A'
+                
+                if hasattr(module, 'get_all_components'):
+                    for component in module.get_all_components():
+                        try:
+                            components.append({
+                                'module_name': module_name,
+                                'name': component.get_name() if hasattr(component, 'get_name') else 'N/A',
+                                'firmware_version': component.get_firmware_version() if hasattr(component, 'get_firmware_version') else 'N/A',
+                                'description': component.get_description() if hasattr(component, 'get_description') else 'N/A'
+                            })
+                        except Exception:
+                            continue
+            except Exception:
+                continue
+    
+    print(json.dumps(components))
+except Exception:
+    print('[]')
+`
+
 // SysEepromPyScript is the Python script that invokes the sonic_platform API
 // to retrieve system EEPROM info.
 var SysEepromPyScript = `
