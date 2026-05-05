@@ -481,7 +481,7 @@ func getPlatformPcieinfo(args sdc.CmdArgs, options sdc.OptionMap) ([]byte, error
 		apiCall = "pcie.get_pcie_check()"
 	}
 
-	platformPath := common.GetPlatformPath()
+	platformPath, _ := common.GetPathsToPlatformAndHwskuDirsOnHost()
 
 	pyScript := fmt.Sprintf(common.PcieInfoPyScript, strconv.Quote(platformPath), apiCall)
 	escaped := strings.ReplaceAll(pyScript, "'", `'\''`)

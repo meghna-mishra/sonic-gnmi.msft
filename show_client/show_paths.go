@@ -1184,7 +1184,7 @@ func init() {
 		nil,
 		showCmdOptionCheck,
 		showCmdOptionVerbose,
-  )
+	)
 
 	// SHOW/platform/syseeprom
 	sdc.RegisterCliPath(
